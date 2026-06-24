@@ -4,12 +4,12 @@
 // 🤟(ILoveYou)
 function getCode(left_gesture, right_gesture) {
   let code_array = {
-    "Thumb_Up": 1,
-    "Thumb_Down": 2,
-    "Victory": 3,
-    "Pointing_Up": 4,
-    "Closed_Fist": 5,
-    "Open_Palm": 6,
+    "point": 1,
+    "piece": 2,
+    "ok": 3,
+    "thumb-up": 4,
+    "open": 5,
+    "fist": 6,
   }
   let left_code = code_array[left_gesture];
   let right_code = code_array[right_gesture];
@@ -20,11 +20,12 @@ function getCode(left_gesture, right_gesture) {
 
 function getCharacter(code) {
   const codeToChar = {
-    "11": "a", "12": "b", "13": "c", "14": "d", "15": "e", "16": "f",
-    "21": "g", "22": "h", "23": "i", "24": "j", "25": "k", "26": "l",
-    "31": "m", "32": "n", "33": "o", "34": "p", "35": "q", "36": "r",
-    "41": "s", "42": "t", "43": "u", "44": "v", "45": "w", "46": "x",
-    "51": "y", "52": "z", "53": " ", "54": "backspace"
+    "11": "a", "12": "b", "13": "c", "14": "d", "15": "e",
+    "21": "f", "22": "g", "23": "h", "24": "i", "25": "j",
+    "31": "k", "32": "l", "33": "m", "34": "n", "35": "o",
+    "41": "p", "42": "q", "43": "r", "44": "s", "45": "t",
+    "51": "u", "52": "v", "53": "w", "54": "x", "55": "y", "56": "z",
+    "66": " ", "61": "backspace"
   };
   return codeToChar[code] || "";
 }
@@ -62,6 +63,10 @@ function setup() {
     gestures_results = results;
 
     if (results.gestures.length == 2) {
+      // Debug: 認識結果をログ出力
+      let top = results.gestures[0][0];
+      console.log(top.categoryName, top.score);
+      
       if (game_mode.now == "ready" && game_mode.previous == "notready") {
         // ゲーム開始前の状態から、カメラが起動した後の状態に変化した場合
         game_mode.previous = game_mode.now;
@@ -83,7 +88,7 @@ function setup() {
 
       let now = millis();
       if (c === lastChar) {
-        if (now - lastCharTime > 1000) {
+        if (now - lastCharTime > 700) {
           // 1秒以上cが同じ値である場合の処理
           typeChar(c);
           lastCharTime = now;
